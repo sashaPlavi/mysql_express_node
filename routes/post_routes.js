@@ -33,8 +33,11 @@ module.exports = function (app, db) {
     });
   });
 
-  app.get("/addpost", (req, res) => {
-    let post = { title: "Post One", body: "body of post one" };
+  app.post("/addpost", (req, res) => {
+    let title = req.body;
+    console.log(title);
+
+    let post = { title: req.body.title, body: req.body.body };
     let sql = "INSERT INTO posts SET ? ";
     let query = db.query(sql, post, (err, result) => {
       if (err) {
@@ -93,5 +96,10 @@ module.exports = function (app, db) {
   });
   app.get("/", (req, res) => {
     res.send("hi there ");
+  });
+  app.post("/", (req, res) => {
+    console.log(req.body);
+
+    res.send(req.body.title + " title");
   });
 };
