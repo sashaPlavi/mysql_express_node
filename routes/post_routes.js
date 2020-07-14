@@ -61,8 +61,19 @@ module.exports = function (app, db) {
       if (err) {
         console.log(err);
       } else {
-        console.log(resultS);
-        res.send("post FECHED :) ");
+        // console.log(resultS[0].title);
+        data = [];
+        resultS.map((item, index) => {
+          //console.log(i);
+          let post = {};
+
+          (post.title = item.title), (post.body = item.body), data.push(post);
+          console.log(post);
+        });
+        // console.log(data);
+        // let posts =  JSON.stringify(data);
+
+        res.send(data);
       }
     });
   });
