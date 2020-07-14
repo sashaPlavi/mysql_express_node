@@ -34,19 +34,26 @@ module.exports = function (app, db) {
   });
 
   app.post("/addpost", (req, res) => {
-    let title = req.body;
-    console.log(title);
-
-    let post = { title: req.body.title, body: req.body.body };
-    let sql = "INSERT INTO posts SET ? ";
-    let query = db.query(sql, post, (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log(result);
-        res.send("post 1 added");
-      }
-    });
+    let title = req.body.title !== "";
+    //console.log(title);
+    if (req.body.title !== "" && req.body.body !== "") {
+      let post = { title: req.body.title, body: req.body.body };
+      let sql = "INSERT INTO posts SET ? ";
+      let query = db.query(sql, post, (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          // console.log(result);
+          res.send(
+            "post tilte " + req.body.title + " post body " + req.body.body
+          );
+        }
+      });
+    } else {
+      res.send({
+        message: "required fields are empty",
+      });
+    }
   });
   app.get("/getposts", (req, res) => {
     let sql = "SELECT * FROM posts";
