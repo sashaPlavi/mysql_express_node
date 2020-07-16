@@ -64,17 +64,16 @@ module.exports = function (app, db) {
         
         data = [];
         resultS.map((item, index) => {
-           
-          let post = {};
-
+           let post = {};
           (post.title = item.title), (post.body = item.body), data.push(post);
           console.log(post);
         });
-       
         res.send(data);
       }
     });
   });
+
+       
   app.get("/getpost/:id", (req, res) => {
     let sql = `SELECT * FROM posts WHERE  id=${req.params.id}`;
     let query = db.query(sql, (err, result) => {
@@ -100,9 +99,14 @@ module.exports = function (app, db) {
   });
       
       
-  app.get("/updatepost/:id", (req, res) => {
-    let newTitle = "updated title";
-    let sql = `UPDATE posts SET title='${newTitle}' WHERE  id=${req.params.id}`;
+  app.post("/updatepost/:id", (req, res) => {
+    let newTitle =  req.body.title;
+    let newBody = req.body.body
+    console.log(newTitle);
+   
+
+    let sql = `UPDATE posts SET title='${newTitle}', body='${newBody}' WHERE  id=${req.params.id}`;
+     
     let query = db.query(sql, (err, result) => {
       if (err) {
         console.log(err);
