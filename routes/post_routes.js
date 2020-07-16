@@ -43,7 +43,7 @@ module.exports = function (app, db) {
         if (err) {
           console.log(err);
         } else {
-          // console.log(result);
+        
           res.send(
             "post tilte " + req.body.title + " post body " + req.body.body
           );
@@ -61,18 +61,16 @@ module.exports = function (app, db) {
       if (err) {
         console.log(err);
       } else {
-        // console.log(resultS[0].title);
+        
         data = [];
         resultS.map((item, index) => {
-          //console.log(i);
+           
           let post = {};
 
           (post.title = item.title), (post.body = item.body), data.push(post);
           console.log(post);
         });
-        // console.log(data);
-        // let posts =  JSON.stringify(data);
-
+       
         res.send(data);
       }
     });
@@ -82,12 +80,26 @@ module.exports = function (app, db) {
     let query = db.query(sql, (err, result) => {
       if (err) {
         console.log(err);
-      } else {
-        console.log(result);
-        res.send("post FECHED  ");
-      }
+      } 
+       if(result.length ){
+         let data =[]
+          result.map((item, index) => {
+           
+          let post = {};
+
+          (post.title = item.title), (post.body = item.body), data.push(post);
+          console.log(post);
+        });
+         
+        res.send(data);
+        }else{
+          console.log(result);
+           res.send("there in no posts with that id")
+        }
     });
   });
+      
+      
   app.get("/updatepost/:id", (req, res) => {
     let newTitle = "updated title";
     let sql = `UPDATE posts SET title='${newTitle}' WHERE  id=${req.params.id}`;
