@@ -43,7 +43,6 @@ module.exports = function (app, db) {
         if (err) {
           console.log(err);
         } else {
-        
           res.send(
             "post tilte " + req.body.title + " post body " + req.body.body
           );
@@ -61,10 +60,9 @@ module.exports = function (app, db) {
       if (err) {
         console.log(err);
       } else {
-        
         data = [];
         resultS.map((item, index) => {
-           let post = {};
+          let post = {};
           (post.title = item.title), (post.body = item.body), data.push(post);
           console.log(post);
         });
@@ -73,48 +71,47 @@ module.exports = function (app, db) {
     });
   });
 
-       
   app.get("/getpost/:id", (req, res) => {
     let sql = `SELECT * FROM posts WHERE  id=${req.params.id}`;
     let query = db.query(sql, (err, result) => {
       if (err) {
         console.log(err);
-      } 
-       if(result.length ){
-         let data =[]
-          result.map((item, index) => {
-           
+      }
+      if (result.length) {
+        let data = [];
+        result.map((item, index) => {
           let post = {};
 
           (post.title = item.title), (post.body = item.body), data.push(post);
           console.log(post);
         });
-         
-        res.send(data);
-        }else{
-          console.log(result);
-           res.send("there in no posts with that id")
-        }
-    });
-  });
-      
-      
-  app.post("/updatepost/:id", (req, res) => {
-    let newTitle =  req.body.title;
-    let newBody = req.body.body
-    console.log(newTitle);
-   
 
-    let sql = `UPDATE posts SET title='${newTitle}', body='${newBody}' WHERE  id=${req.params.id}`;
-     
-    let query = db.query(sql, (err, result) => {
-      if (err) {
-        console.log(err);
+        res.send(data);
       } else {
         console.log(result);
-        res.send("post updated  ");
+        res.send("there in no posts with that id");
       }
     });
+  });
+
+  app.post("/updatepost/:id", (req, res) => {
+    let newTitle = req.body.title;
+    let newBody = req.body.body;
+
+    if (newBody.length > 1 && newTitle.length > 1) {
+      let sql = `UPDATE posts SET title='${newTitle}', body='${newBody}' WHERE  id=${req.params.id}`;
+
+      let query = db.query(sql, (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(result);
+          res.send("post updated  ");
+        }
+      });
+    } else {
+      res.send("post body and post title must be filled");
+    }
   });
   app.get("/deletepost/:id", (req, res) => {
     let newTitle = "updated title";
