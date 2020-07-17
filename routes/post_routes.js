@@ -114,16 +114,21 @@ module.exports = function (app, db) {
     }
   });
   app.get("/deletepost/:id", (req, res) => {
-    let newTitle = "updated title";
-    let sql = `DELETE FROM posts WHERE  id=${req.params.id}`;
-    let query = db.query(sql, (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log(result);
-        res.send("post DELETED ");
-      }
-    });
+    console.dir(req.params.id);
+
+    if (req.params.id !== " ") {
+      let sql = `DELETE FROM posts WHERE  id=${req.params.id}`;
+      let query = db.query(sql, (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(result);
+          res.send("post DELETED ");
+        }
+      });
+    } else {
+      res.send("please enter id post you want to delete");
+    }
   });
   app.get("/", (req, res) => {
     res.send("hi there ");
